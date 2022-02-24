@@ -1,0 +1,48 @@
+#!/bin/bash
+if ! [[ -d /home/user/source ]]
+then
+	echo "source directory doesn't exist."
+	exit
+fi
+report_path=/home/user/backup-report.log
+cur_date=$(date +%F)
+prev_dirpath=$(find /home/user/ -name "Backup-*")
+prev_date=$(echo $prev_dirpath |
+awk -F '/' '{print $4}' |
+awk -F '-' '{print $2"-"$3"-"$4}')
+let date_diff=($(date -d $cur_date +%s) - $(date -d $prev_date +%s))/86400
+new_dirname="Backup-"$cur_date
+touch tmp_new.log
+touch tmp_upd.log
+if [[ $prev_date != "--" ]] && [[ $date_diff -le 7 ]]
+then
+	for file in $(ls /home/user/source)
+	do
+		path_name="$prev_dirpath/$file"
+		if [[ -f $path_name ]]
+		then
+			prev_sz=$(stat -c%s /home/user/source/$file)
+			new_sz=$(stat -c%s $path_name)
+			if [[ $prev_sz -ne $new_sz ]]
+			then
+				mv $path_name $path_name"."$cur_date
+				cp /home/user/source/$file $path_name
+				echo "New version of file has been backed up. Filename: "$file >> tmp_upd.log
+			fi
+		else
+			cp /home/user/source/$file $path_name
+			echo "New file has been backed up. Filename: "$file >> tmp_new.log
+		fi
+	done
+	echo "Backup file has been updated. Date: "$cur_date >> $report_path
+	cat tmp_new.log >> $report_path
+	cat tmp_upd.log >> $report_path
+else
+	mkdir /home/user/$new_dirname
+	cp /home/user/source/* /home/user/$new_dirname
+	echo "New backup directory has been created. Date: "$cur_date" Name: "$new_dirname >> $report_path
+	echo "Backed up files:" >> $report_path
+	ls /home/user/source >> $report_path
+fi
+rm tmp_new.log
+rm tmp_upd.log

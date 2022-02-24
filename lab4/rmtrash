@@ -1,0 +1,17 @@
+#!/bin/bash
+fileName=$1
+homeTrash="/home/.trash"
+homeLog="/home/trash.log"
+
+[ $# -ne 1 ] && exit
+[ -f "$1" ] || exit
+
+[ -d $homeTrash ] || mkdir $homeTrash
+
+[ -e $PWD/"$fileName" ] || exit
+
+id="$(date +%s)$(date +%N)"
+ln $fileName "$homeTrash/$id"
+path="$PWD/"$fileName""
+echo "$path:$id" >> $homeLog
+rm "$fileName"

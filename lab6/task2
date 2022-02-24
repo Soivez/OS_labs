@@ -1,0 +1,14 @@
+host name
+mkdir NetSource
+net share temp=C:\LAB6\NetSource /grant:everyone,FULL
+
+'task2.bat'
+	copy /y /z C:\Windows\explorer.exe \\%computername%\temp > C:\LAB6\task.bat
+schtasks /create /tn task /sc MINUTE /tr task.bat
+schtasks /query | find "task"
+schtasks /delete /tn task
+
+fc C:\Windows\explorer.exe \\%computername%\temp\explorer.exe
+
+	
+	

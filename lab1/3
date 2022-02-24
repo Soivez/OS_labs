@@ -1,0 +1,22 @@
+#!/bin/bash
+
+PS3='Select your choice: '
+
+select opt in "nano" "vi" "links" "Quit"
+do
+    case $opt in
+        "nano")
+            nano
+            ;;
+        "vi")
+            vi
+            ;;
+        "links")
+            links
+            ;;
+        "Quit")
+            break
+            ;;
+        *) echo "invalid input option $REPLY";;
+    esac
+done

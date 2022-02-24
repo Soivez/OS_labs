@@ -1,0 +1,4 @@
+#!/bin/bash
+VAR=$(ps -u user axh -o pid,command)
+echo "${VAR}"| wc -l > 1.txt
+echo "${VAR}">> 1.txt

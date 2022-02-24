@@ -1,0 +1,11 @@
+#!/bin/bash
+B=""
+while true
+do
+read A
+if [[ $A == "q" ]]
+then break
+fi
+let B=$B$A
+done
+echo $B

@@ -1,0 +1,11 @@
+mkdir LAB6
+cd LAB6
+ver > version.txt
+systeminfo | find "Physical Memory" > meminfo.txt
+wmic logicaldisk get description,name > diskinfo.txt
+
+mkdir TEST
+copy * TEST
+cd TEST
+copy * test.txt
+for /f "skip=1" %a in ('dir /b /o-d /a-d') do del %a

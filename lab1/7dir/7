@@ -1,0 +1,2 @@
+#!/bin/bash
+grep -r @ /etc | grep -E -o '\<[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]+\>' > emails.lst

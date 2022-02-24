@@ -1,0 +1,50 @@
+#!/bin/bash
+fileName=$1
+
+homeLogs="/home/trash.log"
+homeTrash="/home/.trash"
+
+[ $# -ne 1 ] && exit
+
+
+logs="$(cat $homeLogs)"
+for i in $logs
+do
+	if [[ "$i" =~ "$fileName:" ]]
+	then
+		file="$(echo $i | cut -d ':' -f 1)"
+		id="$(echo $i | cut -d ':' -f 2)"
+		if [ -f "$homeTrash/$id" ]
+		then
+			echo "Do you want to restore $file? y/n"
+			read ans
+			if [ $ans == "y" ]
+			then
+				if [ -d $(dirname $file) ]
+				then
+					if [ ! -f $file ]
+					then
+						ln "$homeTrash/$id" "$file"
+						rm "$homeTrash/$id"
+						echo $logs | grep -v -w '$i' > $homeLogs
+					else
+						echo "This file already exists. Do you want to rename it? y/n"
+						read ansToRename
+						if [ $ansToRename == "y" ]
+						then
+							ln "$homeTrash/$id" "$file$id"
+							rm "$homeTrash/$id"
+							echo $logs | grep -v -w '$i' > $homeLogs
+						fi
+					fi
+				else
+					echo "$(dirname $file) doesn't exist anymore, file has been restored at home directory"
+					ln "$homeTrash/$id" "/home/$fileName"
+					rm "$homeTrash/$id"
+					echo $logs | grep -v -w '$i' > $homeLogs
+				fi
+			fi
+		fi
+	fi
+done
+

@@ -1,0 +1,23 @@
+#!/bin/bash
+A=$1
+if [[ ${#1} -lt ${#2} ]]
+then A=$2
+else 
+	if [[ ${#1} -eq ${#2} ]]
+	then
+		if [[ $1 < $2 ]]
+		then A=$2
+		fi
+	fi
+fi
+if [[ ${#A} -lt ${#3} ]]
+then A=$3
+else
+	if [[ ${#A} -eq ${#3} ]]
+	then
+		if [[ $A < $3 ]]
+		then A=$3
+		fi
+	fi
+fi
+echo $A

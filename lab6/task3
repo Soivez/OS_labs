@@ -1,0 +1,8 @@
+sc query > Service.txt
+
+'task3.bat'
+	sc stop dnscache
+	timeout /t 30
+	sc query > Services1.txt
+	fc Services.txt Services1.txt > Services2.txt
+	sc start dnscache

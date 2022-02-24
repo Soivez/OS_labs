@@ -1,0 +1,2 @@
+#!/bin/bash
+man bash | tr '[:space:]' '[\n*]' | grep -v '^\s*$' | grep -E -o '\<....+\>' | sort | uniq -c | sort -bnr | head -n 3
